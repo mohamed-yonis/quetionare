@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="so">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Waraysiga Odayaasha · Guur Xasiloon</title>
+<meta name="description" content="Foomka waraysiga odayaasha ee buugga Guur Xasiloon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single interview sheet (like a field notebook) with a slim header strip; sending instructions below the sheet. */
+:root{
+  --bg:#eef1f4;          /* cool paper */
+  --sheet:#ffffff;
+  --ink:#16233a;         /* deep indigo ink */
+  --muted:#5b6679;
+  --line:#d7dde6;
+  --accent:#1f4fa3;      /* Somali-flag blue, deepened */
+  --accent-soft:#e3ebf8;
+  --gold:#b7791f;        /* henna/amber */
+  --gold-soft:#f7ecd9;
+  --ok:#2f7d4f;
+  --danger:#b3372c;
+  --wa:#1b7f4b;          /* WhatsApp-ish green, deep enough for white text */
+  --f-display:"Young Serif", Georgia, "Times New Roman", serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1520; --sheet:#161e2c; --ink:#e6ebf3; --muted:#9aa6ba; --line:#2a3548;
+    --accent:#7fa6ea; --accent-soft:#1d2a44; --gold:#e0a64a; --gold-soft:#2e2517;
+    --ok:#6cc08f; --danger:#ef8a7f; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1520; --sheet:#161e2c; --ink:#e6ebf3; --muted:#9aa6ba; --line:#2a3548;
+  --accent:#7fa6ea; --accent-soft:#1d2a44; --gold:#e0a64a; --gold-soft:#2e2517;
+  --ok:#6cc08f; --danger:#ef8a7f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+:root{padding-top:env(safe-area-inset-top,0px)}
+[hidden]{display:none!important}
+body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+
+header.top{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:0;max-width:62ch}
+
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:clamp(18px,4vw,36px);display:flex;flex-direction:column;gap:32px}
+
+.person{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}
+.person .full{grid-column:1/-1}
+@media (max-width:620px){.person{grid-template-columns:1fr 1fr}.person .name{grid-column:1/-1}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+label,.lbl{font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--muted)}
+input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 12px;width:100%}
+input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent;background:var(--sheet)}
+input.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.hint{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+
+.section{display:flex;flex-direction:column;gap:22px}
+.sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.sec-head h2{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0}
+.sec-head span{font-family:var(--f-mono);font-size:12px;color:var(--gold);letter-spacing:.08em}
+
+.q{display:grid;grid-template-columns:40px 1fr;gap:4px 14px}
+.q .n{font-family:var(--f-display);font-size:22px;color:var(--accent);line-height:1.2;text-align:right}
+.q .body{display:flex;flex-direction:column;gap:8px;min-width:0}
+.q .prompt{font-weight:600;font-size:16.5px;margin:0}
+.q textarea{min-height:92px;resize:vertical;line-height:1.55}
+.q.done .n{color:var(--ok)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.q{grid-template-columns:28px 1fr}.q .n{font-size:18px}.pair{grid-template-columns:1fr}}
+
+.bar{position:sticky;bottom:0;z-index:5;margin-inline:-16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(6px);border-top:1px solid var(--line)}
+.bar-in{max-width:820px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.progress{display:flex;align-items:center;gap:10px;flex:1 1 180px;min-width:0}
+.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;background:var(--gold);width:0;transition:width .25s}
+.count{font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+button{font:inherit;font-weight:600;font-size:14px;border-radius:4px;padding:9px 14px;cursor:pointer;border:1px solid var(--line);background:var(--sheet);color:var(--ink)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--sheet)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.5;cursor:default}
+button.link{border:none;background:none;padding:4px 6px;color:var(--accent)}
+button.danger{color:var(--danger)}
+.status{font-size:13px;color:var(--muted);min-height:1.2em;width:100%}
+.status.ok{color:var(--ok)} .status.err{color:var(--danger)}
+
+button.wa{border-color:var(--wa);background:var(--wa);color:#fff;padding:9px 16px}
+.send{display:flex;flex-direction:column;gap:8px;max-width:62ch}
+.send h2{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0}
+.send ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:4px}
+.send .note{margin:0;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Buuga · Guur Xasiloon</div>
+    <h1>Su'aalaha Waraysiga Odayaasha</h1>
+    <p class="sub">Sheekada Guurka Hore. Buuxi xogta qofka, qor jawaabihiisa, kadibna riix “U dir WhatsApp” si jawaabaha oo dhami u gaaraan qoraaga buugga.</p>
+  </header>
+
+  <form class="sheet" id="form" autocomplete="off">
+    <div class="person">
+      <div class="field name">
+        <label for="f-name">Magaca qofka la waraysanayo</label>
+        <input id="f-name" name="magac" placeholder="Tusaale: Xaawo Cali Faarax">
+      </div>
+      <div class="field">
+        <label for="f-age">Da'da</label>
+        <input id="f-age" name="da" class="num" inputmode="numeric" placeholder="78">
+      </div>
+      <div class="field">
+        <label for="f-born">Sanadka uu dhashay</label>
+        <input id="f-born" name="dhalasho" class="num" inputmode="numeric" placeholder="1948">
+      </div>
+      <div class="field">
+        <label for="f-place">Deegaanka / Magaalada</label>
+        <input id="f-place" name="deegaan" placeholder="Muqdisho">
+      </div>
+      <div class="field">
+        <label for="f-date">Taariikhda waraysiga</label>
+        <input id="f-date" name="taariikh" type="date">
+      </div>
+      <div class="field">
+        <label for="f-by">Waraystaha</label>
+        <input id="f-by" name="waraystaha" placeholder="Magacaaga">
+      </div>
+      <div class="hint full" id="age-hint">Ku qor da'da ama sanadka dhalashada — kan kale si toos ah ayuu isu buuxinayaa.</div>
+    </div>
+
+    <div id="sections"></div>
+  </form>
+
+  <section class="send" aria-labelledby="send-title">
+    <h2 id="send-title">Sida jawaabaha loo diro</h2>
+    <ol>
+      <li>Buuxi magaca qofka iyo inta su'aalood ee uu ka jawaabay.</li>
+      <li>Riix <b>U dir PDF WhatsApp</b>. Taleefanka, liiska wadaagista ayaa furmaya: dooro <b>WhatsApp</b>, kadib dooro qoraaga buugga oo dir. PDF-ku si toos ah ayuu ugu lifaaqan yahay.</li>
+      <li>Kombiyuutarka: PDF-ka ayaa soo degaya, WhatsApp-na wuu furmayaa. Riix 📎, dooro <b>Document</b>, kadibna PDF-ka dir.</li>
+    </ol>
+    <p class="note">Haddii aad rabto nuqul adiga kuu gaar ah, riix <b>Soo deji PDF</b>. Haddii PDF-ku shaqayn waayo, riix <b>Koobi qoraalka</b> oo jawaabaha WhatsApp ugu dhaji.</p>
+  </section>
+</div>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="progress">
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <span class="count" id="count">0 / 12</span>
+    </div>
+    <button type="button" id="btn-new">Waraysi cusub</button>
+    <button type="button" id="btn-copy">Koobi qoraalka</button>
+    <button type="button" id="btn-pdf">Soo deji PDF</button>
+    <button type="button" class="wa" id="btn-wa">U dir PDF WhatsApp</button>
+    <div class="status" id="status" role="status"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const SECTIONS = [
+  { title: "Guurka iyo xilligiisa", tag: "SU'AALAHA 1–4", qs: [
+    { id: "q1",  t: "Sanadkee ayaad guursatay, xaggeese ahayd — miyi mise magaalo?" },
+    { id: "q2",  t: "Sidee ku ogaatay in xilligaas aad guursanaysay ay ku habboon tahay in la guursado? Yaa kuu sheegay?" },
+    { id: "q3",  t: "Yaa kuu doortay xaaskaaga ama ninkaaga — adiga mise waalidkaa?" },
+    { id: "q4",  t: "Haddii aad labadiinnuba is jeclaateen guurka ka hor, maxaa dhacay? Sidee ayay u falceliyeen waalidiintiinnu, oo sidee loo maareeyay arrintaas?" },
+  ]},
+  { title: "Meherka, sooryada iyo arooska", tag: "SU'AALAHA 5–8", qs: [
+    { id: "q5",  t: "Immisa geel ama lacag ah ayaa lagu bixiyay meherkaaga?" },
+    { id: "q6",  t: "Sooryada sidee loo bixin jiray, yaase qaadan jiray?" },
+    { id: "q7",  t: "Immisa maalmood ayay socotay xafladda arooskaagu?" },
+    { id: "q8",  t: "Waa maxay waxa ugu weyn ee aad ka xasuusato xafladdii arooskaaga?" },
+  ]},
+  { title: "Da'da iyo guurka maanta", tag: "SU'AALAHA 9–12", qs: [
+    { id: "q9",  t: "Immisa jir ayaad ahayd markii aad guursanaysay? Qofka aad guursanaysayna meeqo jir buu ahaa?", pair: ["Da'daada markaas", "Da'da qofka kale"] },
+    { id: "q10", t: "Meeqo jir ayaad kula talin lahayd jiilka maanta in ay ku guursadaan?" },
+    { id: "q11", t: "Sidee u aragtaa guurka maanta marka la barbardhigo kii hore?" },
+    { id: "q12", t: "Ma jiraan dhaqamo hore oo aad u aragto in loo baahan yahay in dib loo soo celiyo?" },
+  ]},
+];
+const ALLQ = SECTIONS.flatMap(s => s.qs);
+const PERSON = ["magac","da","dhalasho","deegaan","taariikh","waraystaha"];
+const THIS_YEAR = new Date().getFullYear();
+
+const $ = s => document.querySelector(s);
+const form = $("#form");
+let currentId = null;
+
+/* ---------- build questions ---------- */
+(function build(){
+  const host = $("#sections");
+  let n = 0;
+  SECTIONS.forEach((s, si) => {
+    const sec = document.createElement("div");
+    sec.className = "section";
+    sec.innerHTML = `<div class="sec-head"><h2></h2><span></span></div>`;
+    sec.querySelector("h2").textContent = s.title;
+    sec.querySelector("span").textContent = s.tag;
+    s.qs.forEach(q => {
+      n++;
+      const el = document.createElement("div");
+      el.className = "q"; el.dataset.q = q.id;
+      el.innerHTML = `<div class="n">${n}</div><div class="body"><p class="prompt" id="p-${q.id}"></p></div>`;
+      el.querySelector(".prompt").textContent = q.t;
+      const body = el.querySelector(".body");
+      if (q.pair){
+        const pr = document.createElement("div"); pr.className = "pair";
+        q.pair.forEach((lab, i) => {
+          const f = document.createElement("div"); f.className = "field";
+          const id = `f-${q.id}${i ? "b" : "a"}`;
+          f.innerHTML = `<label for="${id}"></label><input id="${id}" name="${q.id}${i ? "b" : "a"}" class="num" inputmode="numeric">`;
+          f.querySelector("label").textContent = lab;
+          pr.appendChild(f);
+        });
+        body.appendChild(pr);
+        const ta = document.createElement("textarea");
+        ta.id = `f-${q.id}`; ta.name = q.id; ta.placeholder = "Faahfaahin dheeraad ah (ikhtiyaari)"; ta.style.minHeight = "60px";
+        ta.setAttribute("aria-labelledby", `p-${q.id}`);
+        body.appendChild(ta);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.id = `f-${q.id}`; ta.name = q.id; ta.placeholder = "Jawaabta…";
+        ta.setAttribute("aria-labelledby", `p-${q.id}`);
+        body.appendChild(ta);
+      }
+      sec.appendChild(el);
+    });
+    host.appendChild(sec);
+  });
+})();
+
+/* ---------- form state ---------- */
+function readForm(){
+  const o = {};
+  for (const el of form.elements) if (el.name) o[el.name] = el.value.trim();
+  return o;
+}
+function fillForm(o){
+  for (const el of form.elements) if (el.name) el.value = (o && o[el.name]) || "";
+  refresh();
+}
+function answered(o){
+  return ALLQ.filter(q => q.pair ? (o[q.id+"a"] || o[q.id+"b"] || o[q.id]) : o[q.id]).length;
+}
+function refresh(){
+  const o = readForm();
+  const a = answered(o);
+  $("#fill").style.width = (a / 12 * 100) + "%";
+  $("#count").textContent = `${a} / 12`;
+  ALLQ.forEach(q => {
+    const done = q.pair ? (o[q.id+"a"] || o[q.id+"b"] || o[q.id]) : o[q.id];
+    document.querySelector(`.q[data-q="${q.id}"]`).classList.toggle("done", !!done);
+  });
+}
+function setStatus(msg, kind){
+  const s = $("#status"); s.textContent = msg || ""; s.className = "status" + (kind ? " " + kind : "");
+}
+
+/* age <-> birth year */
+const ageEl = $("#f-age"), bornEl = $("#f-born");
+ageEl.addEventListener("input", () => {
+  const a = parseInt(ageEl.value, 10);
+  if (a > 0 && a < 130) bornEl.value = THIS_YEAR - a;
+});
+bornEl.addEventListener("input", () => {
+  const y = parseInt(bornEl.value, 10);
+  if (y > 1880 && y <= THIS_YEAR) ageEl.value = THIS_YEAR - y;
+});
+
+/* draft in local storage */
+let draftTimer;
+form.addEventListener("input", () => {
+  refresh();
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(() => {
+    try { localStorage.setItem("waraysi-draft", JSON.stringify({ id: currentId, data: readForm() })); } catch(e){}
+  }, 400);
+});
+form.addEventListener("submit", e => e.preventDefault());
+
+function todayISO(){ const d = new Date(); return d.toISOString().slice(0,10); }
+(function restore(){
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem("waraysi-draft") || "null"); } catch(e){}
+  if (d && d.data){ currentId = d.id || null; fillForm(d.data); }
+  if (!$("#f-date").value) $("#f-date").value = todayISO();
+  refresh();
+})();
+
+/* ---------- plain text export ---------- */
+function toText(o){
+  const L = [];
+  L.push("GUUR XASILOON — WARAYSIGA ODAYAASHA");
+  L.push("Sheekada Guurka Hore");
+  L.push("");
+  L.push(`Magaca: ${o.magac || "—"}`);
+  L.push(`Da'da: ${o.da || "—"}    Sanadka dhalashada: ${o.dhalasho || "—"}`);
+  L.push(`Deegaanka: ${o.deegaan || "—"}`);
+  L.push(`Taariikhda waraysiga: ${o.taariikh || "—"}    Waraystaha: ${o.waraystaha || "—"}`);
+  L.push("");
+  ALLQ.forEach((q, i) => {
+    L.push(`${i+1}. ${q.t}`);
+    if (q.pair){
+      L.push(`   ${q.pair[0]}: ${o[q.id+"a"] || "—"}   ·   ${q.pair[1]}: ${o[q.id+"b"] || "—"}`);
+      if (o[q.id]) L.push("   " + o[q.id]);
+    } else L.push("   " + (o[q.id] || "—"));
+    L.push("");
+  });
+  return L.join("\n");
+}
+
+$("#btn-copy").addEventListener("click", () => {
+  const txt = toText(readForm());
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(
+      () => setStatus("Qoraalka waa la koobiyeeyay.", "ok"),
+      () => fallbackCopy(txt));
+  } else fallbackCopy(txt);
+});
+function fallbackCopy(txt){
+  const ta = document.createElement("textarea"); ta.value = txt; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); setStatus("Qoraalka waa la koobiyeeyay.", "ok"); }
+  catch(e){ setStatus("Koobiga lama suurtogelin. Qoraalka gacanta ku dooro.", "err"); }
+  ta.remove();
+}
+
+$("#btn-new").addEventListener("click", () => {
+  const by = $("#f-by").value;
+  fillForm({ taariikh: todayISO(), waraystaha: by });
+  try { localStorage.removeItem("waraysi-draft"); } catch(e){}
+  setStatus("Waraysi cusub ayaa diyaar ah.");
+  $("#f-name").focus();
+});
+
+/* ---------- WhatsApp ---------- */
+// Lambarka WhatsApp ee qoraaga buugga (qaab caalami ah, lambar keliya).
+const WA_NUMBER = "252616689824";
+function waMessage(o){
+  return `Asc. Waa waraysiga ${o.magac || ""}${o.da ? " (" + o.da + " jir)" : ""} ee buugga Guur Xasiloon.`;
+}
+function updateWa(){}
+/* ---------- PDF ---------- */
+function clean(s){
+  return String(s || "")
+    .replace(/[‘’ʼ]/g, "'").replace(/[“”]/g, '"')
+    .replace(/[–—]/g, "-").replace(/…/g, "...")
+    .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g, "");
+}
+function safeName(s){ return (clean(s).replace(/[^A-Za-z0-9 _-]/g, "").trim().replace(/\s+/g, "-") || "waraysi"); }
+
+function buildPdf(o){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const W = 210, H = 297, M = 18, CW = W - 2*M;
+  const INK = [22,35,58], INDIGO = [31,79,163], GOLD = [183,121,31], MUTED = [91,102,121], LINE = [215,221,230], TINT = [238,241,244], GOLDSOFT = [247,236,217];
+  const col = (c, fn) => fn.apply(doc, c);
+  let y = 0;
+
+  // header band
+  doc.setFillColor(...INDIGO); doc.rect(0, 0, W, 44, "F");
+  doc.setFillColor(...GOLD); doc.rect(0, 44, W, 1.6, "F");
+  doc.setFont("helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(240, 205, 140);
+  doc.setCharSpace(1.2); doc.text("BUUGA  ·  GUUR XASILOON", M, 15); doc.setCharSpace(0);
+  doc.setFont("times", "bold"); doc.setFontSize(24); doc.setTextColor(255,255,255);
+  doc.text("Waraysiga Odayaasha", M, 27);
+  doc.setFont("times", "italic"); doc.setFontSize(12); doc.setTextColor(214, 226, 247);
+  doc.text("Sheekada Guurka Hore", M, 35);
+  y = 56;
+
+  // person card
+  const fields = [
+    ["MAGACA", o.magac], ["DA'DA", o.da ? o.da + " jir" : ""], ["SANADKA DHALASHADA", o.dhalasho],
+    ["DEEGAANKA", o.deegaan], ["TAARIIKHDA WARAYSIGA", o.taariikh], ["WARAYSTAHA", o.waraystaha],
+  ];
+  const cardH = 40;
+  doc.setFillColor(...TINT); doc.roundedRect(M, y, CW, cardH, 2, 2, "F");
+  doc.setFillColor(...GOLD); doc.rect(M, y, 1.4, cardH, "F");
+  const cw3 = (CW - 10) / 3;
+  fields.forEach((f, i) => {
+    const cx = M + 7 + (i % 3) * cw3, cy = y + 10 + Math.floor(i / 3) * 17;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(7); doc.setTextColor(...MUTED);
+    doc.setCharSpace(0.6); doc.text(f[0], cx, cy); doc.setCharSpace(0);
+    doc.setFont(i === 0 ? "times" : "helvetica", i === 0 ? "bold" : "normal");
+    doc.setFontSize(i === 0 ? 13 : 11); doc.setTextColor(...INK);
+    const v = doc.splitTextToSize(clean(f[1]) || "-", cw3 - 4)[0];
+    doc.text(v, cx, cy + 6.5);
+  });
+  y += cardH + 12;
+
+  const newPage = () => { doc.addPage(); y = 22; };
+  const need = h => { if (y + h > H - 20) newPage(); };
+
+  let n = 0;
+  SECTIONS.forEach(sec => {
+    need(24);
+    doc.setFont("times", "bold"); doc.setFontSize(15); doc.setTextColor(...INDIGO);
+    doc.text(clean(sec.title), M, y);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(...GOLD);
+    doc.setCharSpace(0.8); doc.text(clean(sec.tag), W - M, y, { align: "right" }); doc.setCharSpace(0);
+    y += 3;
+    doc.setDrawColor(...LINE); doc.setLineWidth(0.3); doc.line(M, y, W - M, y);
+    y += 8;
+
+    sec.qs.forEach(q => {
+      n++;
+      const tx = M + 11, tw = CW - 11;
+      doc.setFont("helvetica", "bold"); doc.setFontSize(10.5);
+      const pLines = doc.splitTextToSize(clean(q.t), tw);
+      let ans = "";
+      if (q.pair){
+        const a = o[q.id+"a"], b = o[q.id+"b"];
+        ans = `${q.pair[0]}: ${a ? a + " jir" : "-"}     ${q.pair[1]}: ${b ? b + " jir" : "-"}`;
+        if (o[q.id]) ans += "\n" + o[q.id];
+      } else ans = o[q.id] || "";
+      doc.setFont("helvetica", "normal"); doc.setFontSize(10.5);
+      const aLines = ans ? doc.splitTextToSize(clean(ans), tw - 5) : ["(Jawaab lama bixin)"];
+      const pH = pLines.length * 5, lineH = 5.4;
+      need(pH + Math.min(aLines.length, 3) * lineH + 8);
+
+      // number badge
+      doc.setFillColor(...INDIGO); doc.circle(M + 4, y - 1.4, 4, "F");
+      doc.setFont("helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(255,255,255);
+      doc.text(String(n), M + 4, y + 0.4, { align: "center" });
+
+      doc.setFont("helvetica", "bold"); doc.setFontSize(10.5); doc.setTextColor(...INK);
+      doc.text(pLines, tx, y, { lineHeightFactor: 1.35 });
+      y += pH + 2.5;
+
+      doc.setFont("helvetica", ans ? "normal" : "italic"); doc.setFontSize(10.5);
+      doc.setTextColor(...(ans ? [40, 50, 68] : MUTED));
+      let start = y - 4;
+      aLines.forEach(line => {
+        if (y + lineH > H - 20){
+          doc.setFillColor(...GOLD); doc.rect(tx, start, 0.8, y - start - 2, "F");
+          newPage(); start = y - 4;
+          doc.setFont("helvetica", ans ? "normal" : "italic"); doc.setFontSize(10.5);
+          doc.setTextColor(...(ans ? [40, 50, 68] : MUTED));
+        }
+        doc.text(line, tx + 5, y);
+        y += lineH;
+      });
+      doc.setFillColor(...GOLD); doc.rect(tx, start, 0.8, y - start - 3, "F");
+      y += 6;
+    });
+    y += 4;
+  });
+
+  // footers
+  const pages = doc.getNumberOfPages();
+  for (let i = 1; i <= pages; i++){
+    doc.setPage(i);
+    doc.setDrawColor(...LINE); doc.setLineWidth(0.3); doc.line(M, H - 13, W - M, H - 13);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(...MUTED);
+    doc.text(clean(`Guur Xasiloon  ·  Waraysiga ${o.magac || ""}`), M, H - 8);
+    doc.text(`Bogga ${i} / ${pages}`, W - M, H - 8, { align: "right" });
+  }
+  return doc;
+}
+
+function pdfReady(o){
+  if (!o.magac){ setStatus("Fadlan ku qor magaca qofka ka hor intaadan PDF samayn.", "err"); $("#f-name").focus(); return false; }
+  if (!window.jspdf){ setStatus("PDF-ka lama diyaarin karo hadda. Hubi internetka, kadibna bogga dib u fur.", "err"); return false; }
+  return true;
+}
+
+$("#btn-pdf").addEventListener("click", () => {
+  const o = readForm();
+  if (!pdfReady(o)) return;
+  try {
+    buildPdf(o).save(`Waraysi-${safeName(o.magac)}.pdf`);
+    setStatus("PDF-ka waa la soo dejiyay.", "ok");
+  } catch(e){ setStatus("PDF-ka lama samayn karo. Isticmaal “Koobi qoraalka”.", "err"); }
+});
+
+$("#btn-wa").addEventListener("click", async () => {
+  const o = readForm();
+  if (!pdfReady(o)) return;
+  const name = `Waraysi-${safeName(o.magac)}.pdf`;
+  let doc;
+  try { doc = buildPdf(o); } catch(e){ setStatus("PDF-ka lama samayn karo. Isticmaal “Koobi qoraalka”.", "err"); return; }
+  const file = new File([doc.output("blob")], name, { type: "application/pdf" });
+
+  // Taleefanka: wadaag PDF-ka si toos ah (WhatsApp ayaa laga dooranayaa liiska)
+  if (navigator.canShare && navigator.canShare({ files: [file] })){
+    try {
+      await navigator.share({ files: [file], title: name, text: waMessage(o) });
+      setStatus("Waa la wadaagay. Mahadsanid!", "ok");
+      return;
+    } catch(e){
+      if (e && e.name === "AbortError"){ setStatus("Wadaagista waa la joojiyay."); return; }
+      // haddii kale, u gudub habka kale
+    }
+  }
+  // Kombiyuutarka ama browser aan wadaagis taageerin: soo deji PDF, fur WhatsApp
+  doc.save(name);
+  window.open("https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waMessage(o) + " PDF-ka jawaabaha ayaan halkan kuugu lifaaqayaa."), "_blank", "noopener");
+  setStatus("PDF-ka waa soo degay, WhatsApp-na waa furmay. Riix 📎 → Document, dooro PDF-ka oo dir.", "ok");
+});
+</script>
+</body>
+</html>
